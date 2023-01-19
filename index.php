@@ -1,71 +1,50 @@
 <?php
-//    const NATIONALITY = "Cameroon";
-    const NATIONALITY = 'Cameroon';
-    $name = "Donald";
-    $surname = "Brice";
-    $age = 36;
-    $stringOne = "My name is  ";
-    $stringTwo = "boods@gmail.com<br>";
+// connect to db
+    include ('config/db_connect.php');
 
-    $radius = 25;
-    $pi = 3.14;
+    // write query for all pizzas
+    $sql = 'SELECT title, ingredients, id FROM pizza ORDER BY created_at';
 
-    //    Basic - *, /, +, -, **
-    // order of execution (Brackets - Indexes - Division - Multiplication - Addition - Subtraction )
+//    make query and get result
+    $result = mysqli_query($conn, $sql);
+
+//    fetch the resulting rows
+    $pizzas = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    mysqli_free_result($result);
+
+    // close the connection
+    mysqli_close($conn);
+
 
 ?>
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Pizzeria</title>
-</head>
-<body>
-    <h1>User Profile Page</h1>
-    <div>
-        <?php
-            echo "My name is $name and surname is $surname. <br>";
-            echo "I am $age";
-        ?>
+    <?php include('templates/header.php'); ?>
+    <h4 class="center grey-text">PIZZAS</h4>
+    <div class="container">
+        <div class="row">
+            <?php foreach ($pizzas as $pizza): ?>
+                <div class="col s6 md3">
+                    <div class="card z-depth-0">
+                        <img src="img/pizza.svg" class="pizza">
+                        <div class="card-content center">
+                            <h6><?php echo htmlspecialchars($pizza['title']); ?></h6>
+                            <ul>
+                                <?php foreach (explode(',', $pizza['ingredients']) as $ingredient): ?>
+                                    <li><?php echo htmlspecialchars($ingredient);?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <div class="card-action right-align">
+                            <a href="details.php?id=<?php echo $pizza['id']; ?>" class="brand-text">more info</a>
+                        </div>
+                    </div>
+                </div>
+
+            <?php endforeach; ?>
+        </div>
     </div>
-    <p>
-        <?php
-            echo "I am from: " . NATIONALITY;
-        ?>
-    </p>
-    <p>
-        <?php
-            echo "Hey my email is: $stringTwo <br>";
-            echo strtoupper($stringOne ) . str_replace("boods","boodscode", $stringTwo);
-            echo strlen($stringTwo)
-        ?>
-    </p>
-    <p>
-        <?php
-            echo $pi * $radius**2 . '<br>';
-            echo 2 * (4 + 9) / 3;
-        ?>
-    </p>
-    <p>
-        <?php
-            $age += 10;
-            echo $age . '<br>';
-            $age += 10;
-            echo $age . '<br>';
-
-            echo floor($pi) . '<br>';
-            $aga = 25.36;
-            echo ceil($aga) . '<br>';
-            echo pi() . '<br>';
-
-        ?>
-    </p>
-    <p>
-        <?php
-            echo "ARRAYS"
-        ?>
-    </p>
-
-</body>
+    <?php include('templates/footer.php'); ?>
 </html>
