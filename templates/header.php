@@ -1,3 +1,19 @@
+<?php
+
+    session_start();
+    
+    if ($_SERVER['QUERY_STRING'] == 'noname'){
+        unset($_SESSION['name']);
+    }
+
+    $name = $_SESSION['name'] ?? 'Guest';
+
+    // get cookie
+    $gender = $_COOKIE['gender'] ?? 'Unknown';
+
+?>
+
+
 <head>
     <title>Dona Pizza</title>
     <!-- Compiled and minified CSS -->
@@ -45,6 +61,10 @@
     <div class="container">
         <a href="/index.php" class="brand-logo brand-text">Dona Pizza</a>
         <ul id="nav-mobile" class="right hide-on-small-and-down">
+            <li class="white-text btn brand teal lighten-2">
+                <span>Hello <?php echo htmlspecialchars($name); ?></span>
+                <span>(<?php echo htmlspecialchars($gender); ?>)</span>
+            </li>
             <li><a href="/add.php" class="btn brand z-depth-0">Add a Pizza</a></li>
         </ul>
     </div>
